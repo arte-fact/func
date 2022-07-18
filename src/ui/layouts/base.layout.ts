@@ -13,7 +13,7 @@ export const baseLayout = (...children: string[]): string => `
 						content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 			<meta http-equiv="X-UA-Compatible" content="ie=edge">
 			<base href="/">
-			<style>${readFileSync('dist/css/index.css').toString()}</style>
+			<style>${readFileSync('dist/index.css').toString()}</style>
 			<title>func-ts</title>
 	</head>
 	<body class="h-full w-full" style="background-color: ${randomColor(100, 100)}; color: ${randomColor(100, 20)}">

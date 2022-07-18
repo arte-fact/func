@@ -4,6 +4,11 @@ import { IncomingMessage, OutgoingMessage } from 'http';
 import { ResponseCallback } from '../../core/funk';
 import { linkComponent } from '../components/link.component';
 
-export const indexView: ResponseCallback = (req: IncomingMessage, res: OutgoingMessage): void => {
-  res.end(baseLayout(linkComponent('/', centeredTitle('NOW', 'FUNK', 'IT ! ⌨️'))));
+export const indexView: ResponseCallback = (_req: IncomingMessage, res: OutgoingMessage): void => {
+  res.end(
+    baseLayout(
+      linkComponent('/some-page', 'go to some page'),
+      linkComponent('/', centeredTitle('NOW', 'FONK', 'IT ! ⌨️')),
+    ),
+  );
 };

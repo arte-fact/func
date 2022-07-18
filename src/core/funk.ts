@@ -3,26 +3,16 @@ import { IncomingMessage, OutgoingMessage } from 'http';
 
 export type ResponseCallback = (req: IncomingMessage, res: OutgoingMessage) => void;
 
-export type JamRouteCallback = {
-  url: string;
-  cbs: ProtocolsCbs;
-};
+export type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+export type JamRoute = Map<Method, ResponseCallback>;
 
-export interface ProtocolsCbs {
-  get?: ResponseCallback;
-  post?: ResponseCallback;
-  put?: ResponseCallback;
-  patch?: ResponseCallback;
-  delete?: ResponseCallback;
-}
-
-export const jam = (notFound: ResponseCallback, ...jamRouteCallbacks: JamRouteCallback[]) => {
+export const jam = (notFound: ResponseCallback, jamRouteCallbacks: Map<string, JamRoute>) => {
   HTTP.createServer((req: IncomingMessage, res: OutgoingMessage) => {
-    jamRouteCallbacks.forEach((cb: JamRouteCallback) => {
-      if (cb.url === req.url && cb.cbs?.get) {
-        cb.cbs.get(req, res);
-      }
-    });
-    if (!res.writableEnded) notFound(req, res);
+    console.log(req.method, req.url);
+    if (!req.url || !req.method || !jamRouteCallbacks.get(req.url)) {
+      notFound(req, res);
+      return;
+    }
+    (jamRouteCallbacks.get(req.url)?.get(req.method as Method) ?? notFound)(req, res);
   }).listen(8080);
 };
